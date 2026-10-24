@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - إبراهيم النذير</title>
+    <!-- استدعاء Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+       <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+               const Sidebar = ({ isOpen }) => (
+            <div className={`bg-white dark:bg-gray-800 border-l dark:border-gray-700 text-gray-800 dark:text-gray-200 h-screen p-4 transition-all duration-300 ${isOpen ? 'w-64' : 'w-20'}`}>
+                <div className="flex items-center justify-center mb-8">
+                    <i className="fa-solid fa-network-wired text-blue-600 text-3xl"></i>
+                    {isOpen && <h2 className="text-xl font-bold mr-3 text-blue-600 dark:text-blue-400">بوابة الوزارة</h2>}
+                </div>
+                <ul className="space-y-2">
+                    <li className="cursor-pointer bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 p-3 rounded-lg flex items-center">
+                        <i className="fa-solid fa-house w-6"></i> {isOpen && <span className="mr-2 font-bold">الرئيسية</span>}
+                    </li>
+                    <li className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg flex items-center">
+                        <i className="fa-solid fa-users w-6"></i> {isOpen && <span className="mr-2">المستخدمين</span>}
+                    </li>
+                    <li className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg flex items-center">
+                        <i className="fa-solid fa-file-invoice w-6"></i> {isOpen && <span className="mr-2">الطلبات</span>}
+                    </li>
+                </ul>
+            </div>
+        );
+
+               const Topbar = ({ toggleSidebar, darkMode, setDarkMode }) => (
+            <div className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700 p-4 flex justify-between items-center transition-colors">
+                <button onClick={toggleSidebar} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 text-xl">
+                    <i className="fa-solid fa-bars"></i>
+                </button>
+                <div className="flex items-center space-x-4 space-x-reverse">
+                    <button onClick={() => setDarkMode(!darkMode)} className="text-gray-600 dark:text-yellow-400 text-xl hover:scale-110 transition-transform">
+                        <i className={darkMode ? "fa-solid fa-sun" : "fa-solid fa-moon"}></i>
+                    </button>
+                    <span className="font-semibold text-gray-700 dark:text-gray-300">مرحباً، إبراهيم</span>
+                    <div className="w-10 h-10 bg-blue-100 dark:bg-gray-600 rounded-full flex items-center justify-center text-blue-600 dark:text-gray-300">
+                        <i className="fa-solid fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        );
+
+               const Dashboard = () => {
+            const [users, setUsers] = useState([]);
+            const [loading, setLoading] = useState(true);
+
+                       useEffect(() => {
+                fetch('https://jsonplaceholder.typicode.com/users')
+                    .then(response => response.json())
+                    .then(data => {
+                        setUsers(data);
+                        setLoading(false);
+                    });
+            }, []);
+
+            return (
+                <div className="p-6">
+                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">نظرة عامة على النظام</h1>
+                    
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border-r-4 border-blue-500 transition-colors">
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <h3 className="text-gray-500 dark:text-gray-400 text-sm">إجمالي المستخدمين</h3>
+                                    <p className="text-3xl font-bold text-gray-800 dark:text-white mt-2">1,250</p>
+                                </div>
+                                <i className="fa-solid fa-users text-4xl text-blue-100 dark:text-gray-700"></i>
+                            </div>
+                        </div>
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border-r-4 border-green-500 transition-colors">
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <h3 className="text-gray-500 dark:text-gray-400 text-sm">الطلبات المكتملة</h3>
+                                    <p className="text-3xl font-bold text-gray-800 dark:text-white mt-2">840</p>
+                                </div>
+                                <i className="fa-solid fa-check-circle text-4xl text-green-100 dark:text-gray-700"></i>
+                            </div>
+                        </div>
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border-r-4 border-yellow-500 transition-colors">
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <h3 className="text-gray-500 dark:text-gray-400 text-sm">الطلبات المعلقة</h3>
+                                    <p className="text-3xl font-bold text-gray-800 dark:text-white mt-2">45</p>
+                                </div>
+                                <i className="fa-solid fa-clock text-4xl text-yellow-100 dark:text-gray-700"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                                       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors">
+                        <div className="p-6 border-b dark:border-gray-700">
+                            <h2 className="text-xl font-bold text-gray-800 dark:text-white">قائمة المستخدمين المسجلين (من الـ API)</h2>
+                        </div>
+                        <div className="overflow-x-auto">
+                            {loading ? (
+                                <div className="p-10 text-center text-blue-500">
+                                    <i className="fa-solid fa-spinner fa-spin text-4xl mb-4"></i>
+                                    <p className="dark:text-gray-300">جاري تحميل البيانات...</p>
+                                </div>
+                            ) : (
+                                <table className="w-full text-right">
+                                    <thead className="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                                        <tr>
+                                            <th className="p-4 font-semibold">الاسم</th>
+                                            <th className="p-4 font-semibold">البريد الإلكتروني</th>
+                                            <th className="p-4 font-semibold">المدينة</th>
+                                            <th className="p-4 font-semibold">الحالة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="text-gray-700 dark:text-gray-300">
+                                        {users.slice(0, 5).map(user => (
+                                            <tr key={user.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                                <td className="p-4">{user.name}</td>
+                                                <td className="p-4">{user.email}</td>
+                                                <td className="p-4">{user.address.city}</td>
+                                                <td className="p-4"><span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">نشط</span></td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+                const App = () => {
+            const [isOpen, setIsOpen] = useState(true);
+            const [darkMode, setDarkMode] = useState(false);
+
+                     useEffect(() => {
+                if (darkMode) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }, [darkMode]);
+
+            return (
+                <div className="flex h-screen overflow-hidden" dir="rtl">
+                    <Sidebar isOpen={isOpen} />
+                    <div className="flex-1 flex flex-col">
+                        <Topbar toggleSidebar={() => setIsOpen(!isOpen)} darkMode={darkMode} setDarkMode={setDarkMode} />
+                        <main className="flex-1 overflow-y-auto">
+                            <Dashboard />
+                        </main>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
