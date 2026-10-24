@@ -63,13 +63,19 @@
             const [users, setUsers] = useState([]);
             const [loading, setLoading] = useState(true);
 
-                       useEffect(() => {
-                fetch('https://jsonplaceholder.typicode.com/users')
-                    .then(response => response.json())
-                    .then(data => {
-                        setUsers(data);
-                        setLoading(false);
-                    });
+                             useEffect(() => {
+                const mockData = [
+                    { id: 1, name: "أحمد علي", email: "ahmed@example.com", address: { city: "الخرطوم" } },
+                    { id: 2, name: "سارة محمد", email: "sara@example.com", address: { city: "أم درمان" } },
+                    { id: 3, name: "خالد عثمان", email: "khaled@example.com", address: { city: "بحري" } },
+                    { id: 4, name: "مريم حسن", email: "mariam@example.com", address: { city: "بورتسودان" } },
+                    { id: 5, name: "عمر يوسف", email: "omar@example.com", address: { city: "مدني" } }
+                ];
+                
+                setTimeout(() => {
+                    setUsers(mockData);
+                    setLoading(false);
+                }, 500);
             }, []);
 
             return (
